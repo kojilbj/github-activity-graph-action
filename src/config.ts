@@ -33,7 +33,7 @@ export function parseConfig(env: Record<string, string | undefined>): CliConfig 
             bg_color: env.BG_COLOR,
             border_color: env.BORDER_COLOR,
             area_color: env.AREA_COLOR,
-            color: env.COLOR,
+            color: env.TEXT_COLOR,
             line: env.LINE_COLOR,
             point: env.POINT_COLOR,
             title_color: env.TITLE_COLOR,
