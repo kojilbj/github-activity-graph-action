@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: kojilbj/github-activity-graph-action@main
+      - uses: kojilbj/github-activity-graph-action@v1
         with:
           username: your-github-username
           token: ${{ secrets.GRAPH_PAT }}
@@ -105,7 +105,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: kojilbj/github-activity-graph-action@main
+      - uses: kojilbj/github-activity-graph-action@v1
         with:
           username: your-github-username
           token: ${{ secrets.GRAPH_PAT }}
