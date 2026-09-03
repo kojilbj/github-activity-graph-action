@@ -2,6 +2,14 @@ import { graphStyle } from './styles/graphStyle';
 import { pointAnimation, lineAnimation } from './styles/graphAnimation';
 import { GraphArgs } from './interfaces/interface';
 
+export const escapeXml = (value: string): string =>
+    value
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&apos;');
+
 export const graphSvg = (props: GraphArgs) => `
     <svg
         width="${props.width}"
@@ -41,7 +49,7 @@ export const graphSvg = (props: GraphArgs) => `
 
             <foreignObject x="0" y="0" width="${props.width}" height="50">
                 <h1 xmlns="http://www.w3.org/1999/xhtml" class="header">
-                    ${props.title}
+                    ${escapeXml(props.title)}
                 </h1>
             </foreignObject>
             ${props.line}
