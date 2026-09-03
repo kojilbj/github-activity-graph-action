@@ -137,7 +137,7 @@ runs:
         BG_COLOR: ${{ inputs.bg_color }}
         BORDER_COLOR: ${{ inputs.border_color }}
         AREA_COLOR: ${{ inputs.area_color }}
-        COLOR: ${{ inputs.color }}
+        TEXT_COLOR: ${{ inputs.color }}
         LINE_COLOR: ${{ inputs.line }}
         POINT_COLOR: ${{ inputs.point }}
         TITLE_COLOR: ${{ inputs.title_color }}
