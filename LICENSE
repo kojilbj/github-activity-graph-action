@@ -19,3 +19,14 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+Portions of `src/` (the rendering approach and theme palette) were
+originally adapted from:
+
+github-readme-activity-graph
+Copyright (c) 2021 Ashutosh Dwivedi
+https://github.com/Ashutosh00710/github-readme-activity-graph
+
+Licensed under the MIT License (same terms as above).
