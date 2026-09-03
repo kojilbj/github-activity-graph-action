@@ -71,7 +71,7 @@ one at `https://github.com/settings/tokens/new`, then add it under
 | `grid` | no | `true` | Show grid lines |
 | `radius` | no | `0` | Card corner radius, clamped to `[0, 16]` |
 | `height` | no | `420` | Card height, clamped to `[200, 600]` |
-| `days` | no | `31` | Number of trailing days to plot |
+| `days` | no | `31` | Number of trailing days to plot, 1-90 (values outside this range fall back to 31; ignored if from/to are set) |
 | `from` | no | — | Custom range start (`YYYY-MM-DD`); requires `to` |
 | `to` | no | — | Custom range end (`YYYY-MM-DD`); requires `from` |
 | `commit` | no | `true` | Whether to commit & push the generated SVG |

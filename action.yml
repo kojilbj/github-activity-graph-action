@@ -74,7 +74,7 @@ inputs:
     required: false
     default: '420'
   days:
-    description: 'Number of trailing days to plot (ignored if from/to are set)'
+    description: 'Number of trailing days to plot, 1-90 (values outside this range fall back to 31; ignored if from/to are set)'
     required: false
     default: '31'
   from:
