@@ -1,0 +1,179 @@
+name: 'GitHub Activity Graph'
+description: 'Renders a GitHub contributions activity graph as a static SVG and optionally commits it.'
+author: 'kojilbj'
+
+inputs:
+  username:
+    description: 'GitHub username to render the graph for'
+    required: true
+  token:
+    description: 'GitHub personal access token (repo scope) used for the GraphQL contributions query'
+    required: true
+  output:
+    description: 'Path (relative to the checked-out repo) to write the SVG to'
+    required: false
+    default: 'assets/activity-graph.svg'
+  theme:
+    description: 'Theme name (see src/styles/themes.ts for the full list)'
+    required: false
+    default: 'default'
+  custom_title:
+    description: 'Overrides the auto-generated "{name}''s Contribution Graph" title'
+    required: false
+    default: ''
+  hide_title:
+    description: 'Hide the title entirely ("true"/"false")'
+    required: false
+    default: 'false'
+  hide_border:
+    description: 'Hide the card border ("true"/"false")'
+    required: false
+    default: 'false'
+  bg_color:
+    description: 'Overrides the theme background color (hex, no #)'
+    required: false
+    default: ''
+  border_color:
+    description: 'Overrides the theme border color (hex, no #)'
+    required: false
+    default: ''
+  area_color:
+    description: 'Overrides the theme area-fill color (hex, no #)'
+    required: false
+    default: ''
+  color:
+    description: 'Overrides the theme primary text/line color (hex, no #)'
+    required: false
+    default: ''
+  line:
+    description: 'Overrides the theme line color (hex, no #)'
+    required: false
+    default: ''
+  point:
+    description: 'Overrides the theme point-marker color (hex, no #)'
+    required: false
+    default: ''
+  title_color:
+    description: 'Overrides the theme title color (hex, no #)'
+    required: false
+    default: ''
+  area:
+    description: 'Show the area fill under the line ("true"/"false")'
+    required: false
+    default: 'false'
+  grid:
+    description: 'Show grid lines ("true"/"false")'
+    required: false
+    default: 'true'
+  radius:
+    description: 'Card corner radius, clamped to [0, 16]'
+    required: false
+    default: '0'
+  height:
+    description: 'Card height, clamped to [200, 600]'
+    required: false
+    default: '420'
+  days:
+    description: 'Number of trailing days to plot (ignored if from/to are set)'
+    required: false
+    default: '31'
+  from:
+    description: 'Custom range start (YYYY-MM-DD); requires "to"'
+    required: false
+    default: ''
+  to:
+    description: 'Custom range end (YYYY-MM-DD); requires "from"'
+    required: false
+    default: ''
+  commit:
+    description: 'Whether to commit and push the generated SVG ("true"/"false")'
+    required: false
+    default: 'true'
+  commit_message:
+    description: 'Commit message used when commit is true'
+    required: false
+    default: 'chore: update activity graph'
+  git_user_name:
+    description: 'Commit author name'
+    required: false
+    default: 'github-actions[bot]'
+  git_user_email:
+    description: 'Commit author email'
+    required: false
+    default: 'github-actions[bot]@users.noreply.github.com'
+
+outputs:
+  svg_path:
+    description: 'The path the SVG was written to'
+    value: ${{ steps.generate.outputs.svg_path }}
+  changed:
+    description: 'Whether a new commit was made ("true"/"false")'
+    value: ${{ steps.commit.outputs.changed }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Install action dependencies
+      shell: bash
+      working-directory: ${{ github.action_path }}
+      run: npm ci
+
+    - name: Generate graph
+      id: generate
+      shell: bash
+      env:
+        GH_USERNAME: ${{ inputs.username }}
+        TOKEN: ${{ inputs.token }}
+        OUTPUT: ${{ inputs.output }}
+        THEME: ${{ inputs.theme }}
+        CUSTOM_TITLE: ${{ inputs.custom_title }}
+        HIDE_TITLE: ${{ inputs.hide_title }}
+        HIDE_BORDER: ${{ inputs.hide_border }}
+        BG_COLOR: ${{ inputs.bg_color }}
+        BORDER_COLOR: ${{ inputs.border_color }}
+        AREA_COLOR: ${{ inputs.area_color }}
+        COLOR: ${{ inputs.color }}
+        LINE_COLOR: ${{ inputs.line }}
+        POINT_COLOR: ${{ inputs.point }}
+        TITLE_COLOR: ${{ inputs.title_color }}
+        AREA: ${{ inputs.area }}
+        GRID: ${{ inputs.grid }}
+        RADIUS: ${{ inputs.radius }}
+        HEIGHT: ${{ inputs.height }}
+        DAYS: ${{ inputs.days }}
+        FROM: ${{ inputs.from }}
+        TO: ${{ inputs.to }}
+      run: |
+        "${{ github.action_path }}/node_modules/.bin/ts-node" "${{ github.action_path }}/src/cli.ts"
+        echo "svg_path=${OUTPUT}" >> "$GITHUB_OUTPUT"
+
+    - name: Commit and push
+      id: commit
+      shell: bash
+      env:
+        COMMIT: ${{ inputs.commit }}
+        OUTPUT: ${{ inputs.output }}
+        GIT_USER_NAME: ${{ inputs.git_user_name }}
+        GIT_USER_EMAIL: ${{ inputs.git_user_email }}
+        COMMIT_MESSAGE: ${{ inputs.commit_message }}
+      run: |
+        if [ "$COMMIT" != "true" ]; then
+          echo "changed=false" >> "$GITHUB_OUTPUT"
+          exit 0
+        fi
+        git config user.name "$GIT_USER_NAME"
+        git config user.email "$GIT_USER_EMAIL"
+        git add "$OUTPUT"
+        if git diff --cached --quiet -- "$OUTPUT"; then
+          git reset -- "$OUTPUT"
+          echo "changed=false" >> "$GITHUB_OUTPUT"
+        else
+          git commit -m "$COMMIT_MESSAGE"
+          git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+        fi
