@@ -11,6 +11,8 @@ keeps working even if this action's own defaults ever change — worst case,
 your README keeps showing the last successfully generated image instead of a
 broken one.
 
+![preview](./docs/preview.svg)
+
 ## Usage
 
 ```yaml
