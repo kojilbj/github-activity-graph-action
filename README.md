@@ -43,6 +43,12 @@ Then embed the committed file in your README:
 ![activity graph](./assets/activity-graph.svg)
 ```
 
+**Live example:** [kojilbj/kojilbj](https://github.com/kojilbj/kojilbj) uses
+this action in production — see its
+[workflow](https://github.com/kojilbj/kojilbj/blob/main/.github/workflows/activity-graph.yml)
+and the resulting
+[committed SVG](https://github.com/kojilbj/kojilbj/blob/main/assets/activity-graph.svg).
+
 `token` needs a GitHub Personal Access Token with `repo` scope (classic
 token), stored as a repo secret — the built-in `secrets.GITHUB_TOKEN` doesn't
 have permission to query another user's contribution data via GraphQL. Create
