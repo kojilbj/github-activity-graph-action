@@ -173,6 +173,20 @@ exposed as an input — no known use case needs it, YAGNI).
   is the real integration test — it has to keep producing a working badge on
   an actual profile README.
 
+## Trying it out (before committing to real use)
+
+Two low-friction ways to verify the action works, documented in `README.md`:
+
+- **Dry-run inside GitHub Actions**: an example `workflow_dispatch`-triggered
+  workflow with `commit: false` plus `actions/upload-artifact` to attach the
+  generated SVG to the run. Lets someone try the action from the Actions tab
+  without any git side effects on their repo.
+- **Local CLI**: since `src/cli.ts` has no dependency on the Action
+  wrapper, cloning the repo and running it directly with env vars set
+  (`GH_USERNAME`, `TOKEN`, etc. — the same way this project's own `cli.ts`
+  was validated throughout development) works standalone, giving an
+  `npx`-like instant terminal check without an npm publish.
+
 ## Versioning
 
 - Develop against `main`; `kojilbj/kojilbj` points at `@main` during
